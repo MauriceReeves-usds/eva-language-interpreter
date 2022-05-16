@@ -21,4 +21,12 @@ describe('top level eva test cases', () => {
   test('eval basic addition', () => {
     expect(eva.eval(['+', 1, 5])).toStrictEqual(6);
   });
+
+  test('eval longer addition', () => {
+    expect(eva.eval(['+', 1, 1, 2, 3, 5, 8, 13])).toStrictEqual(33);
+  });
+
+  test('eval nested addition', () => {
+    expect(eva.eval(['+', 1, ['+', 2, 5]])).toStrictEqual(8);
+  });
 });
