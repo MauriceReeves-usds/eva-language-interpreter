@@ -1,0 +1,23 @@
+{
+  "name": "eva-language-interpreter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "interpreter.js",
+  "scripts": {
+    "start": "node bin/eva-interpreter.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MauriceReeves-usds/eva-language-interpreter.git"
+  },
+  "author": "Maurice Reeves",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MauriceReeves-usds/eva-language-interpreter/issues"
+  },
+  "homepage": "https://github.com/MauriceReeves-usds/eva-language-interpreter#readme",
+  "dependencies": {
+    "jest": "^28.1.0"
+  }
+}
