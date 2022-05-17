@@ -50,4 +50,28 @@ describe('control statement tests', () => {
       `);
     expect(eva.eval(exp)).toStrictEqual(10);
   });
+
+  test('parsing inc statement', () => {
+    const exp = evaParser.parse(`
+      (begin
+        (var counter 0)
+        (var result 0)
+        (while (< counter 10)
+            (begin
+                (set result (inc result))
+                (set counter (inc counter)))))
+      `);
+    expect(eva.eval(exp)).toStrictEqual(10);
+  });
+
+  test('parsing dec statement', () => {
+    const exp = evaParser.parse(`
+      (begin
+        (var counter 10)
+        (while (> counter 0)
+            (begin
+                (set counter (dec counter)))))
+      `);
+    expect(eva.eval(exp)).toStrictEqual(0);
+  });
 });

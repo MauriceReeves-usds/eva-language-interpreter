@@ -63,6 +63,15 @@ const GlobalEnvironment = new Environment({
     const [op1, op2] = values;
     return op1 !== op2;
   },
+  inc(values) {
+    return values[0] + 1;
+  },
+  dec(values) {
+    return values[0] - 1;
+  },
+  print(values) {
+    console.log(JSON.stringify(values));
+  },
 });
 
 /**
