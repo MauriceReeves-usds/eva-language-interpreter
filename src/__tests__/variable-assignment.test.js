@@ -1,19 +1,13 @@
 const {
   expect, test, describe, beforeEach,
 } = require('@jest/globals');
-const { Environment } = require('../Environment');
 const { Eva } = require('../Eva');
 
 describe('variable assignment tests', () => {
   let eva;
 
   beforeEach(() => {
-    eva = new Eva(new Environment({
-      true: true,
-      false: false,
-      nil: null,
-      null: null,
-    }));
+    eva = new Eva();
   });
 
   test('simple assignment', () => {

@@ -1,20 +1,13 @@
 const {
   expect, test, describe, beforeEach,
 } = require('@jest/globals');
-const { Environment } = require('../Environment');
 const { Eva } = require('../Eva');
 
 describe('block expression tests', () => {
   let eva;
-  const env = new Environment({
-    null: null,
-    nil: null,
-    true: true,
-    false: false,
-  });
 
   beforeEach(() => {
-    eva = new Eva(env);
+    eva = new Eva();
   });
 
   test('basic block', () => {

@@ -24,4 +24,10 @@ describe('All the helper functions', () => {
     expect(Eva.isString(null)).toStrictEqual(false);
     expect(Eva.isString(5)).toStrictEqual(false);
   });
+
+  test('check isVariableName', () => {
+    expect(Eva.isVariableName('foo')).toStrictEqual(true);
+    expect(Eva.isVariableName('*')).toStrictEqual(true);
+    expect(Eva.isVariableName('+')).toStrictEqual(true);
+  });
 });

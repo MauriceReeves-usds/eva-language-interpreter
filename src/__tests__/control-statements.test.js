@@ -1,21 +1,14 @@
 const {
   expect, test, describe, beforeEach,
 } = require('@jest/globals');
-const { Environment } = require('../Environment');
 const { Eva } = require('../Eva');
 const evaParser = require('../../parser/evaParser');
 
 describe('control statement tests', () => {
   let eva;
-  const env = new Environment({
-    null: null,
-    nil: null,
-    true: true,
-    false: false,
-  });
 
   beforeEach(() => {
-    eva = new Eva(env);
+    eva = new Eva();
   });
 
   test('check the if statement', () => {

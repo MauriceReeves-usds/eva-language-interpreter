@@ -74,13 +74,6 @@ class Eva {
 
     // ------------------------------------------
     // some mathematical expressions
-    if (lookAhead === '+') {
-      let result = 0;
-      for (let x = 1; x < exp.length; x += 1) {
-        result += this.eval(exp[x], env);
-      }
-      return result;
-    }
 
     if (lookAhead === '*') {
       let result = 1;
@@ -177,6 +170,17 @@ class Eva {
       return result;
     }
 
+    if (Array.isArray(exp)) {
+      const fn = this.eval(exp[0], env);
+      const args = exp
+        .slice(1)
+        .map((arg) => this.eval(arg, env));
+      // native functions
+      if (typeof fn === 'function') {
+        return fn(args);
+      }
+    }
+
     // unhandled cases
     throw new Error(`Uninplemented: ${JSON.stringify(exp)}`);
   }
@@ -224,7 +228,7 @@ class Eva {
    */
   static isVariableName(exp) {
     return typeof exp === 'string'
-          && /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(exp);
+          && /^[=+\-*/><a-zA-Z][a-zA-Z0-9_-]*$/.test(exp);
   }
 }
 
