@@ -39,6 +39,30 @@ const GlobalEnvironment = new Environment({
     });
     return result;
   },
+  '>': function (values) {
+    const [op1, op2] = values;
+    return op1 > op2;
+  },
+  '<': function (values) {
+    const [op1, op2] = values;
+    return op1 < op2;
+  },
+  '>=': function (values) {
+    const [op1, op2] = values;
+    return op1 >= op2;
+  },
+  '<=': function (values) {
+    const [op1, op2] = values;
+    return op1 <= op2;
+  },
+  '=': function (values) {
+    const [op1, op2] = values;
+    return op1 === op2;
+  },
+  '!=': function (values) {
+    const [op1, op2] = values;
+    return op1 !== op2;
+  },
 });
 
 /**
@@ -71,54 +95,6 @@ class Eva {
     }
 
     const lookAhead = exp[0];
-
-    // ------------------------------------------
-    // some mathematical expressions
-
-    if (lookAhead === '*') {
-      let result = 1;
-      for (let x = 1; x < exp.length; x += 1) {
-        result *= this.eval(exp[x], env);
-      }
-      return result;
-    }
-
-    if (lookAhead === '-') {
-      let result = this.eval(exp[1]);
-      for (let x = 2; x < exp.length; x += 1) {
-        result -= this.eval(exp[x], env);
-      }
-      return result;
-    }
-
-    if (lookAhead === '/') {
-      let result = this.eval(exp[1]);
-      for (let x = 2; x < exp.length; x += 1) {
-        result /= this.eval(exp[x], env);
-      }
-      return result;
-    }
-
-    // ------------------------------------------
-    // comparison operators
-    switch (lookAhead) {
-      case '>':
-        return this.eval(exp[1], env) > this.eval(exp[2], env);
-      case '<':
-        return this.eval(exp[1], env) < this.eval(exp[2], env);
-      case '>=':
-        return this.eval(exp[1], env) >= this.eval(exp[2], env);
-      case '<=':
-        return this.eval(exp[1], env) <= this.eval(exp[2], env);
-      case '=':
-      case 'eq':
-        return this.eval(exp[1], env) === this.eval(exp[2], env);
-      case '!=':
-      case 'neq':
-        return this.eval(exp[1], env) !== this.eval(exp[2], env);
-      default:
-        break;
-    }
 
     // ------------------------------------------
     // block statements
