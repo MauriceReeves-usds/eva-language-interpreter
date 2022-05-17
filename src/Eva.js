@@ -65,7 +65,7 @@ class Eva {
     if (lookAhead === '+') {
       let result = 0;
       for (let x = 1; x < exp.length; x += 1) {
-        result += this.eval(exp[x]);
+        result += this.eval(exp[x], env);
       }
       return result;
     }
@@ -73,7 +73,7 @@ class Eva {
     if (lookAhead === '*') {
       let result = 1;
       for (let x = 1; x < exp.length; x += 1) {
-        result *= this.eval(exp[x]);
+        result *= this.eval(exp[x], env);
       }
       return result;
     }
@@ -81,7 +81,7 @@ class Eva {
     if (lookAhead === '-') {
       let result = this.eval(exp[1]);
       for (let x = 2; x < exp.length; x += 1) {
-        result -= this.eval(exp[x]);
+        result -= this.eval(exp[x], env);
       }
       return result;
     }
@@ -89,9 +89,16 @@ class Eva {
     if (lookAhead === '/') {
       let result = this.eval(exp[1]);
       for (let x = 2; x < exp.length; x += 1) {
-        result /= this.eval(exp[x]);
+        result /= this.eval(exp[x], env);
       }
       return result;
+    }
+
+    // ------------------------------------------
+    // block statements
+    if (lookAhead === 'begin') {
+      const blockEnv = new Environment({}, env);
+      return this.evalBlock(exp, blockEnv);
     }
 
     // ------------------------------------------
@@ -99,7 +106,15 @@ class Eva {
     if (lookAhead === 'var') {
       // eslint-disable-next-line no-unused-vars
       const [_, name, value] = exp;
-      return env.define(name, this.eval(value));
+      return env.define(name, this.eval(value, env));
+    }
+
+    // ------------------------------------------
+    // variable definition
+    if (lookAhead === 'set') {
+      // eslint-disable-next-line no-unused-vars
+      const [_, name, value] = exp;
+      return env.assign(name, this.eval(value, env));
     }
 
     // ------------------------------------------
@@ -110,6 +125,23 @@ class Eva {
 
     // unhandled cases
     throw new Error(`Uninplemented: ${JSON.stringify(exp)}`);
+  }
+
+  /**
+   * evaluates a block and returns the last evaluated value
+   * @param {*} block
+   * @param {*} env
+   * @returns
+   */
+  evalBlock(block, env) {
+    let result;
+
+    // eslint-disable-next-line no-unused-vars
+    const [_tag, ...expressions] = block;
+    expressions.forEach((exp) => {
+      result = this.eval(exp, env);
+    });
+    return result;
   }
 }
 
