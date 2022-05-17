@@ -21,7 +21,8 @@
   "homepage": "https://github.com/MauriceReeves-usds/eva-language-interpreter#readme",
   "dependencies": {
     "@jest/globals": "^28.1.0",
-    "jest": "^28.1.0"
+    "jest": "^28.1.0",
+    "syntax-cli": "^0.1.25"
   },
   "devDependencies": {
     "eslint": "^8.15.0",

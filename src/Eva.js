@@ -95,6 +95,27 @@ class Eva {
     }
 
     // ------------------------------------------
+    // comparison operators
+    switch (lookAhead) {
+      case '>':
+        return this.eval(exp[1], env) > this.eval(exp[2], env);
+      case '<':
+        return this.eval(exp[1], env) < this.eval(exp[2], env);
+      case '>=':
+        return this.eval(exp[1], env) >= this.eval(exp[2], env);
+      case '<=':
+        return this.eval(exp[1], env) <= this.eval(exp[2], env);
+      case '=':
+      case 'eq':
+        return this.eval(exp[1], env) === this.eval(exp[2], env);
+      case '!=':
+      case 'neq':
+        return this.eval(exp[1], env) !== this.eval(exp[2], env);
+      default:
+        break;
+    }
+
+    // ------------------------------------------
     // block statements
     if (lookAhead === 'begin') {
       const blockEnv = new Environment({}, env);
@@ -121,6 +142,27 @@ class Eva {
     // variable look up
     if (isVariableName(exp)) {
       return env.lookup(exp);
+    }
+
+    // ------------------------------------------
+    // variable look up
+    if (lookAhead === 'if') {
+      // eslint-disable-next-line no-unused-vars
+      const [_tag, condition, consequent, alternate] = exp;
+      if (this.eval(condition, env)) {
+        return this.eval(consequent, env);
+      }
+      return this.eval(alternate, env);
+    }
+
+    if (lookAhead === 'while') {
+      // eslint-disable-next-line no-unused-vars
+      const [_tag, condition, body] = exp;
+      let result;
+      while (this.eval(condition, env)) {
+        result = this.eval(body, env);
+      }
+      return result;
     }
 
     // unhandled cases
