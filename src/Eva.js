@@ -1,33 +1,45 @@
+/* eslint-disable func-names */
 const { Environment } = require('./Environment');
 
-/**
- * Returns true if exp is a number
- * @param {*} exp
- * @returns
- */
-function isNumber(exp) {
-  return typeof exp === 'number';
-}
-
-/**
-   * Returns true is exp is a string and enclosed in double quotes
-   * @param {*} exp
-   * @returns
-   */
-function isString(exp) {
-  return typeof exp === 'string'
-          && exp[0] === '"'
-          && exp.slice(-1) === '"';
-}
-
-/**
- * Returns true if exp points to a variable
- * @param {*} exp
- */
-function isVariableName(exp) {
-  return typeof exp === 'string'
-        && /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(exp);
-}
+const GlobalEnvironment = new Environment({
+  null: null,
+  nil: null,
+  true: true,
+  false: false,
+  VERSION: '0.1',
+  // built-ins
+  '+': function (values) {
+    let result = 0;
+    values.forEach((v) => {
+      result += v;
+    });
+    return result;
+  },
+  '-': function (values) {
+    if (values.length === 1) {
+      return -values[0];
+    }
+    let result = values[0];
+    values.slice(1).forEach((x) => {
+      result -= x;
+    });
+    return result;
+  },
+  '*': function (values) {
+    let result = 1;
+    values.forEach((v) => {
+      result *= v;
+    });
+    return result;
+  },
+  '/': function (values) {
+    let result = values[0];
+    values.slice(1).forEach((x) => {
+      result /= x;
+    });
+    return result;
+  },
+});
 
 /**
    *
@@ -37,7 +49,7 @@ class Eva {
      * Creates the interpreter with a new environment
      * @param {*} global
      */
-  constructor(global = new Environment()) {
+  constructor(global = GlobalEnvironment) {
     this.global = global;
   }
 
@@ -50,11 +62,11 @@ class Eva {
   eval(exp, env = this.global) {
     // ------------------------------------------
     // self evaluating expressions
-    if (isNumber(exp)) {
+    if (Eva.isNumber(exp)) {
       return exp;
     }
 
-    if (isString(exp)) {
+    if (Eva.isString(exp)) {
       return exp.slice(1, -1);
     }
 
@@ -140,7 +152,7 @@ class Eva {
 
     // ------------------------------------------
     // variable look up
-    if (isVariableName(exp)) {
+    if (Eva.isVariableName(exp)) {
       return env.lookup(exp);
     }
 
@@ -185,6 +197,35 @@ class Eva {
     });
     return result;
   }
+
+  /**
+ * Returns true if exp is a number
+ * @param {*} exp
+ * @returns
+ */
+  static isNumber(exp) {
+    return typeof exp === 'number';
+  }
+
+  /**
+   * Returns true is exp is a string and enclosed in double quotes
+   * @param {*} exp
+   * @returns
+   */
+  static isString(exp) {
+    return typeof exp === 'string'
+            && exp[0] === '"'
+            && exp.slice(-1) === '"';
+  }
+
+  /**
+   * Returns true if exp points to a variable
+   * @param {*} exp
+   */
+  static isVariableName(exp) {
+    return typeof exp === 'string'
+          && /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(exp);
+  }
 }
 
-module.exports = { Eva, isNumber, isString };
+module.exports = { Eva, GlobalEnvironment };

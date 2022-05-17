@@ -1,27 +1,27 @@
 const {
   expect, test, describe,
 } = require('@jest/globals');
-const { isNumber, isString } = require('../Eva');
+const { Eva } = require('../Eva');
 
 describe('All the helper functions', () => {
   test('check isNumber', () => {
     // positive cases
-    expect(isNumber(1)).toStrictEqual(true);
-    expect(isNumber(42.0)).toStrictEqual(true);
-    expect(isNumber(0xab)).toStrictEqual(true);
-    expect(isNumber(-1)).toStrictEqual(true);
+    expect(Eva.isNumber(1)).toStrictEqual(true);
+    expect(Eva.isNumber(42.0)).toStrictEqual(true);
+    expect(Eva.isNumber(0xab)).toStrictEqual(true);
+    expect(Eva.isNumber(-1)).toStrictEqual(true);
     // negative cases
-    expect(isNumber('hello')).toStrictEqual(false);
-    expect(isNumber(null)).toStrictEqual(false);
+    expect(Eva.isNumber('hello')).toStrictEqual(false);
+    expect(Eva.isNumber(null)).toStrictEqual(false);
   });
 
   test('check isString', () => {
     // positive cases
-    expect(isString('""')).toStrictEqual(true);
-    expect(isString('"eva"')).toStrictEqual(true);
-    expect(isString('"hello eva"')).toStrictEqual(true);
+    expect(Eva.isString('""')).toStrictEqual(true);
+    expect(Eva.isString('"eva"')).toStrictEqual(true);
+    expect(Eva.isString('"hello eva"')).toStrictEqual(true);
     // negative cases
-    expect(isString(null)).toStrictEqual(false);
-    expect(isString(5)).toStrictEqual(false);
+    expect(Eva.isString(null)).toStrictEqual(false);
+    expect(Eva.isString(5)).toStrictEqual(false);
   });
 });
