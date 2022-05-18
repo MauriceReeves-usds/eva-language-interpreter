@@ -155,6 +155,18 @@ class Eva {
       return result;
     }
 
+    if (lookAhead === 'def') {
+      // eslint-disable-next-line no-unused-vars
+      const [_tag, name, params, body] = exp;
+      const fn = {
+        params,
+        body,
+        env, // closure!
+      };
+
+      return env.define(name, fn);
+    }
+
     if (Array.isArray(exp)) {
       const fn = this.eval(exp[0], env);
       const args = exp
@@ -164,10 +176,35 @@ class Eva {
       if (typeof fn === 'function') {
         return fn(args);
       }
+
+      // user defined functions
+      const activationRecord = {};
+      fn.params.forEach((param, index) => {
+        activationRecord[param] = args[index];
+      });
+      const activationEnv = new Environment(
+        activationRecord,
+        fn.env, // static scoping
+      );
+
+      return this.evalBody(fn.body, activationEnv);
     }
 
     // unhandled cases
     throw new Error(`Uninplemented: ${JSON.stringify(exp)}`);
+  }
+
+  /**
+   * Evaluates function bodies.  HOT!
+   * @param {*} body
+   * @param {*} env
+   */
+  evalBody(body, env) {
+    if (body[0] === 'begin') {
+      return this.evalBlock(body, env);
+    }
+
+    return this.eval(body, env);
   }
 
   /**
